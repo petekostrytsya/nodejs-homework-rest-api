@@ -19,7 +19,7 @@ const getContactById = async (req, res) => {
 }
 
 const addContact = async (req, res) => {
-    const { error } = schemas.validate(req.body);
+    const { error } = schemas.addSchema.validate(req.body);
     if (error) {
           throw HttpError(400, 'missing required name field');
         }
@@ -37,7 +37,7 @@ const removeContact = async (req, res) => {
 }
 
 const updateContact = async (req, res) => {
-    const { error } = schemas.validate(req.body);
+    const { error } = schemas.addSchema.validate(req.body);
     if (error) {
           throw HttpError(400, 'missing fields');
         }
@@ -50,7 +50,7 @@ const updateContact = async (req, res) => {
 }
 
 const updateFavorite = async (req, res) => {
-    const { error } = schemas.validate(req.body);
+    const { error } = schemas.updateFavoriteSchema.validate(req.body);
     if (error) {
           throw HttpError(400, 'missing fields');
         }
