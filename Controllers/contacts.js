@@ -5,7 +5,10 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 const { schemas } = require('../models/contact');
 
 const listContacts = async (req, res) => {
-    const result = await Contact.find();
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+    const result = await Contact.find({owner}, '', {skip, limit}).populate('owner', 'name email');
     res.json(result);  
 }
 
@@ -19,11 +22,12 @@ const getContactById = async (req, res) => {
 }
 
 const addContact = async (req, res) => {
+  const { _id: owner } = req.user;
     const { error } = schemas.addSchema.validate(req.body);
     if (error) {
           throw HttpError(400, 'missing required name field');
         }
-    const result = await Contact.create(req.body);
+  const result = await Contact.create({ ...req.body, owner});
     res.status(201).json(result);
 }
 
